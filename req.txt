@@ -5,5 +5,5 @@ djangorestframework
 djangorestframework-simplejwt
 python-decouple
 drf_yasg
-
+django-cors-headers
 
