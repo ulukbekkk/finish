@@ -35,6 +35,6 @@ class Product(models.Model):
         verbose_name = 'Product'
         verbose_name_plural = 'Products'
 
-    def save(self):
+    def save(self, *args, **kwargs):
         self.slug = self.title.lower().replace(" ", '-')
-        return super().save()
+        return super().save(*args, **kwargs)
