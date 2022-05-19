@@ -38,9 +38,14 @@ schema_view = get_schema_view(
 router = SimpleRouter()
 router.register('products', ProductViewSet)
 
+
+
+
+
 urlpatterns = [
     path('', schema_view.with_ui('swagger', cache_timeout=0)),
     path('admin/', admin.site.urls),
+    path('api/v1/', include('account.urls')),
     path('api/v1/', include(router.urls)),
 ]
 
