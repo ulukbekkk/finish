@@ -42,6 +42,7 @@ INSTALLED_APPS = [
 
     #rest_framework
     'rest_framework',
+    'drf_yasg',
     'rest_framework_simplejwt',
 
     #my apps
@@ -82,7 +83,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'config.wsgi.application'
 
-AUTH_USER_MODEL = 'account.User'
 
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
