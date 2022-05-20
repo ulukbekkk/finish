@@ -1,7 +1,7 @@
-import email
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from rest_framework_simplejwt.tokens import RefreshToken, TokenError
 
 User = get_user_model()
 
@@ -49,7 +49,19 @@ class ProfileUpdateSerializer(serializers.ModelSerializer):
         fields = ('first_name', "last_name", "image",)
 
 
-    # def to_representation(self, instance):
-    #     representation = super().to_representation(instance)
-    #     representation['image'] = ['http://127.0.0.1:8000/media/user_image/default_author.png']
-    #     return representation
+class LogoutSerializer(serializers.Serializer):
+    refresh = serializers.CharField()
+
+    default_error_messages = {
+        'bad_token': ('Token is expired or invalid')
+    }
+
+    def validate(self, attrs):
+        self.token = attrs['refresh']
+        return attrs
+
+    def save(self, **kwargs):
+        try:
+            RefreshToken(self.token).blacklist()
+        except TokenError as exc:
+            self.fail('bad_token')
