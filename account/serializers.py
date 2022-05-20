@@ -47,3 +47,9 @@ class ProfileUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ('first_name', "last_name", "image",)
+
+
+    # def to_representation(self, instance):
+    #     representation = super().to_representation(instance)
+    #     representation['image'] = ['http://127.0.0.1:8000/media/user_image/default_author.png']
+    #     return representation
