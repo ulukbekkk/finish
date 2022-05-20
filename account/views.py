@@ -1,7 +1,10 @@
 from django.shortcuts import get_object_or_404
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+# from rest_framework.authtoken.models import Token
+
 from .serializers import *
 from rest_framework_simplejwt.views import TokenObtainPairView
 from .helpers import send_confirmation_email
@@ -54,3 +57,10 @@ class ProfileUpdateAPIView(UpdateAPIView):
 
 
 
+class LogoutView(APIView):
+    permission_classes = [IsAuthenticated, ]
+
+    def post(self, request):
+        user = request.user
+        Token.objects.filter(user=user).delete()
+        return Response('Successfully logged out', status=status.HTTP_200_OK)
