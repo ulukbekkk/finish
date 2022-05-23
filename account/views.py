@@ -43,7 +43,7 @@ class ActivationView(APIView):
 class UserListAPIView(ListAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    permission_classes = (permissions.IsAuthenticated,)
+    permission_classes = (permissions.IsAdminUser,)
 
 
 class ProfileRetrieveAPIView(RetrieveAPIView):
