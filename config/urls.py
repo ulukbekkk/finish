@@ -25,7 +25,7 @@ from drf_yasg import openapi
 from product.views import ProductViewSet
 
 
-# swagger
+""" swagger """
 schema_view = get_schema_view(
     openapi.Info(
         title='Final Hackathon',
@@ -46,6 +46,7 @@ urlpatterns = [
     path('', schema_view.with_ui('swagger', cache_timeout=0)),
     path('admin/', admin.site.urls),
     path('api/v1/account/', include('account.urls')),
+    path('api/v1/', include('product.urls')),
     path('api/v1/', include(router.urls)),
 ]
 

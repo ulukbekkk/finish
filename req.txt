@@ -2,7 +2,7 @@ django
 psycopg2-binary
 Pillow
 djangorestframework
-djangorestframework-simplejwt
+PyJWT==1.7.1
 python-decouple
 drf_yasg
 django-cors-headers
