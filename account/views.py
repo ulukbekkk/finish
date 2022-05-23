@@ -7,7 +7,7 @@ from rest_framework import status, generics
 
 from .serializers import *
 from rest_framework_simplejwt.views import TokenObtainPairView
-from .helpers import send_confirmation_email
+from .helpers import send_confirmation_email, IsOwnerOrReadOnly
 from django.contrib.auth import get_user_model
 from rest_framework.generics import ListAPIView, RetrieveAPIView, RetrieveUpdateAPIView, UpdateAPIView
 from rest_framework import permissions
@@ -54,6 +54,8 @@ class ProfileRetrieveAPIView(RetrieveAPIView):
 class ProfileUpdateAPIView(UpdateAPIView):
     queryset = User.objects.all()
     serializer_class = ProfileUpdateSerializer
+    permission_classes = (IsOwnerOrReadOnly,)
+
 
 
 class LogoutAPIView(generics.GenericAPIView):

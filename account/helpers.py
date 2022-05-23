@@ -1,6 +1,7 @@
 from django.core import mail
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
+from rest_framework import permissions
 
 
 def send_confirmation_email(user):
@@ -22,3 +23,10 @@ def send_confirmation_email(user):
         [to_emails],
         html_message=msg_html
     )
+
+
+class IsOwnerOrReadOnly(permissions.BasePermission):
+    def has_object_permission(self, request, view, obj):
+        if request.method in permissions.SAFE_METHODS:
+            return True
+        return obj.id == request.user.id
