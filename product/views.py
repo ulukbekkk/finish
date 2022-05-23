@@ -6,8 +6,8 @@ from rest_framework.views import APIView
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
 
-from .models import Product, Comment
-from .serializers import ProductSerializer, CommentCreateSerializer, CommentRetrieveUpdateDestroySerializer
+from .models import Product, Comment, Category
+from .serializers import ProductSerializer, CommentCreateSerializer, CommentRetrieveUpdateDestroySerializer, CategorySerializer
 from .helpers import MyPaginationView, IsAdminOrReadOnly, IsOwnerOrReadOnly
 
 
@@ -59,7 +59,9 @@ class CommentRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView)
     permission_classes = (IsOwnerOrReadOnly, IsAdminOrReadOnly,)
 
 
-
+class CategotyListAPIView(generics.ListAPIView):
+    serializer_class = CategorySerializer
+    queryset = Category.objects.all()
 
     # """Добавление отзыва к фильму"""
     # def post(self, request):
