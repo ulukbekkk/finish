@@ -2,22 +2,20 @@ from rest_framework import viewsets, pagination, filters
 from rest_framework.decorators import action
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
+from rest_framework.views import APIView
+from rest_framework import generics
+from rest_framework.permissions import IsAuthenticated
 
-from .models import Product
-from .serializers import ProductSerializer
-
-
-class MyPaginationView(PageNumberPagination):
-    page_size = 2
-
-    def get_paginated_response(self, data):
-        return super().get_paginated_response(data)
+from .models import Product, Comment
+from .serializers import ProductSerializer, CommentCreateSerializer, CommentRetrieveUpdateDestroySerializer
+from .helpers import MyPaginationView, IsAdminOrReadOnly, IsOwnerOrReadOnly
 
 
 class ProductViewSet(viewsets.ModelViewSet):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     pagination_class = MyPaginationView
+    permission_classes = (IsAdminOrReadOnly,)
 
     search_fields = ('title', 'description', )
     filter_backends = (filters.SearchFilter, )
@@ -36,8 +34,37 @@ class ProductViewSet(viewsets.ModelViewSet):
         elif price == 'desc':
             queryset = queryset.order_by('-price')
 
-        # разбиваем queryset на страницы
+        """ разбиваем queryset на страницы """
         page = self.paginate_queryset(queryset)
-        # сериализуем
+        """ сериализуем """
         serializer = self.get_serializer(page, many=True)
         return Response(serializer.data)
+
+
+class CommentCreateView(generics.CreateAPIView):
+    queryset = Comment.objects.all()
+    serializer_class = CommentCreateSerializer
+    permission_classes = (IsAuthenticated,)
+
+    def get_serializer_context(self):
+        return {'request': self.request,
+                'format': self.format_kwarg,
+                'view': self}
+
+
+
+class CommentRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Comment.objects.all()
+    serializer_class = CommentRetrieveUpdateDestroySerializer
+    permission_classes = (IsOwnerOrReadOnly, IsAdminOrReadOnly,)
+
+
+
+
+    # """Добавление отзыва к фильму"""
+    # def post(self, request):
+    #     comment = CommentCreateSerializer(data=request.data)
+    #     print(comment)
+    #     if comment.is_valid(raise_exception=True):
+    #         comment.save()
+    #     return Response( status=201)
