@@ -1,4 +1,4 @@
-from rest_framework import viewsets, pagination, filters
+from rest_framework import viewsets, pagination, filters, permissions
 from rest_framework.decorators import action
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
@@ -62,6 +62,9 @@ class CommentRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView)
 class CategotyListAPIView(generics.ListAPIView):
     serializer_class = CategorySerializer
     queryset = Category.objects.all()
+    permission_classes = (permissions.IsAdminUser)
+
+
 
     # """Добавление отзыва к фильму"""
     # def post(self, request):
